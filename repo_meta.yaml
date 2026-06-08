@@ -5,12 +5,12 @@ lifecycle: active
 owner: darren-you
 governance_tier: standard
 domains:
-  - android_app
+  - magisk_module
 delivery_surfaces:
-  - android_app
+  - magisk_module
 depends_on: []
 default_workflows:
-  - release_android_app
+  - build_magisk_module
 doc_status:
   architecture: present
   api: not_applicable
@@ -22,7 +22,6 @@ github:
   topics:
     - darren-space
     - tooling-repo
-    - android-app
     - magisk-module
     - usb-notification
     - usb-debugging
