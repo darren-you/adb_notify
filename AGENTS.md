@@ -14,6 +14,7 @@
 - 当根 `README.md`、子工程 `README.md`、`deploy_config.sh`、实际目录结构之间出现不一致时，以当前仓库实际文件和配置为准，不要死记旧规则。
 - 仅在故障排查、bug 修复、线上问题定位或明确需要复盘历史问题时，优先检索工作区根目录 `harness/docs/issues/` 中是否已有类似记录及解决方案。
 - 对于明确的代码修改、文档修改、重构、实现新功能、纯说明类问题，不要求默认先检查上述问题归档目录。
+- 在 `darren_space` 工作区内，GitHub 仓库名固定使用小写下划线风格：只允许小写字母、数字和 `_`，例如 `auth_service`、`template_project`；`darren-you/darren-you` 是 GitHub Profile README 平台规则要求的唯一例外，不能改成下划线命名。
 - 在 `darren_space` 工作区内，新仓和历史仓的默认分支一律只允许 `master`；不允许新增 `main` 作为默认分支，也不允许继续保留 `main` 兼容逻辑。
 - 如果发现某个仓库仍存在 `main` 默认分支或 `origin/main` 遗留引用，治理动作固定为：补齐 `master`、切换默认分支到 `master`、删除本地与远端旧 `main`，再继续后续治理。
 - 在 `darren_space` 工作区内，如用户要求“全部提交并推送”“批量 pull/push 整个工作区”这类针对全工作区的 Git 操作，优先直接使用工作区根目录 `darren_space_git.sh`，不要逐仓库手动执行；除非用户明确要求只处理单个仓库，或该脚本不适用。
