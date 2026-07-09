@@ -1,3 +1,3 @@
-同步仓库治理 AGENTS 规则
+同步 FastDeploy Core AGENTS 规则
 
-同步 GitHub 仓库小写下划线命名与默认分支固定为 master 的工作区规则。
+刷新 AGENTS 生成物，统一部署核心与控制面命名。

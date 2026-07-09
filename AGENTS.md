@@ -18,7 +18,7 @@
 - 在 `darren_space` 工作区内，新仓和历史仓的默认分支一律只允许 `master`；不允许新增 `main` 作为默认分支，也不允许继续保留 `main` 兼容逻辑。
 - 如果发现某个仓库仍存在 `main` 默认分支或 `origin/main` 遗留引用，治理动作固定为：补齐 `master`、切换默认分支到 `master`、删除本地与远端旧 `main`，再继续后续治理。
 - 在 `darren_space` 工作区内，如用户要求“全部提交并推送”“批量 pull/push 整个工作区”这类针对全工作区的 Git 操作，优先直接使用工作区根目录 `darren_space_git.sh`，不要逐仓库手动执行；除非用户明确要求只处理单个仓库，或该脚本不适用。
-- 在 `darren_space` 工作区内，如任务明确属于子工程 `fast_deploy` submodule 同步，优先走 `workspace-fast-deploy-submodule-sync` Skill，不要长期直接在子工程内嵌的 `fast_deploy` 目录脱离源工程单独维护。
+- 在 `darren_space` 工作区内，如任务明确属于子工程 `fast_deploy_core` submodule 同步，优先走 `workspace-fast-deploy-submodule-sync` Skill，不要长期直接在子工程内嵌的 `fast_deploy_core` 目录脱离源工程单独维护。
 - 在 `darren_space` 工作区内，凡是面向人工在本地 terminal 直接执行的脚本 / CLI，默认终端输出都应遵循 `harness/docs/workspace/standards/tooling/terminal_output_golden_path.md`：优先块状摘要，颜色只做增强，机器可读模式保持纯文本。
 
 ## Engineering Standards
