@@ -19,6 +19,7 @@
 - 如果发现某个仓库仍存在 `main` 默认分支或 `origin/main` 遗留引用，治理动作固定为：补齐 `master`、切换默认分支到 `master`、删除本地与远端旧 `main`，再继续后续治理。
 - 在 `darren_space` 工作区内，如用户要求“全部提交并推送”“批量 pull/push 整个工作区”这类针对全工作区的 Git 操作，优先直接使用工作区根目录 `darren_space_git.sh`，不要逐仓库手动执行；除非用户明确要求只处理单个仓库，或该脚本不适用。
 - 在 `darren_space` 工作区内，如任务明确属于子工程 `fast_deploy_core` submodule 同步，优先走 `workspace-fast-deploy-submodule-sync` Skill，不要长期直接在子工程内嵌的 `fast_deploy_core` 目录脱离源工程单独维护。
+- 在 `darren_space` 工作区内，人工可读的展示名称统一使用 `Fast Deploy`（标题式）或 `fast deploy`（句中普通文本）；`fast_deploy_panel`、域名、路径、服务名、API 和代码符号等技术标识按真实值保留。外部原样导入的第三方源码中，与工作区产品无关的上游专名按原始命名保留。
 - 在 `darren_space` 工作区内，凡是面向人工在本地 terminal 直接执行的脚本 / CLI，默认终端输出都应遵循 `harness/docs/workspace/standards/tooling/terminal_output_golden_path.md`：优先块状摘要，颜色只做增强，机器可读模式保持纯文本。
 
 ## Engineering Standards
