@@ -42,12 +42,12 @@
 
 ## Commit Message Record
 
-- 当前工作区内每个子工程根目录统一维护 `commit_message.txt`，它是“该仓库自上次成功 push 以来待提交变更”的记录账本。
-- 开始修改某仓库前，必须先检查工作树、暂存区与当前分支相对远端的领先提交：只要仍存在任何未 push 变更，就必须保留 `commit_message.txt` 已有记录并追加本次条目；只有确认没有未 push 变更时，才能用本次条目替换上一轮已 push 的记录。
+- 当前工作区内每个子工程根目录统一维护 `commit_message.txt`，它只记录该仓库尚未成功 push 的待提交变更；最近一次 push 已成功时文件必须为空。
+- 开始修改某仓库前，必须先检查工作树、暂存区与当前分支相对远端的领先提交：只要仍存在任何未 push 变更，就必须保留 `commit_message.txt` 已有记录并追加本次条目；确认没有未 push 变更时，直接从空文件写入本次条目。
 - `commit_message.txt` 只允许使用 Markdown 无序列表：每个独立变更占一行，格式固定为 `- <中文变更摘要>`；不写标题、空行或列表外正文，不重复已有条目。
-- 成功 push 后不立即清空 `commit_message.txt`；下一次修改该仓库时，按“是否仍有未 push 变更”的判定结果追加或开启新一轮记录。
+- `darren_space_git.sh push` 必须在每个仓库远端 push 成功后立即清空对应 `commit_message.txt`，push 失败则保留原记录；空文件是成功 push 后的正常稳定状态，不得为清空动作额外制造待推送提交或脏工作树。
 - 当用户要求提交某个子工程时，优先使用该仓库 `commit_message.txt` 的第一条生成 commit 标题，并将完整无序列表写入 commit body；除非用户明确指定新文案，否则不临时改写。
-- 如果一次任务同时修改多个子工程，必须分别更新各自的 `commit_message.txt`；批量 push 通知按“项目名: 7 位 commit SHA”分组展示各仓库的完整条目。
+- 如果一次任务同时修改多个子工程，必须分别更新各自的 `commit_message.txt`；批量 push 通知在清空前按“项目名: 7 位 commit SHA”分组展示各仓库的完整条目。
 
 ## ADB Notify Scope
 
