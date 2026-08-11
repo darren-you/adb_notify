@@ -42,12 +42,13 @@
 
 ## Commit Message Record
 
-- 当前工作区内每个子工程根目录统一维护 `commit_message.txt`，它只记录该仓库尚未成功 push 的待提交变更；最近一次 push 已成功时文件必须为空。
-- 开始修改某仓库前，必须先检查工作树、暂存区与当前分支相对远端的领先提交：只要仍存在任何未 push 变更，就必须保留 `commit_message.txt` 已有记录并追加本次条目；确认没有未 push 变更时，直接从空文件写入本次条目。
+- 当前工作区内每个 Git 根目录统一且仅维护根部一个 `commit_message.txt`，它只记录尚未进入本地提交的变更意图；普通子目录和 path-scoped 工程继承所属 Git 根记录，禁止另建同名文件。尚未 push 的本地提交由 Git ahead 状态表达，不再把已进入 commit body 的记录留在文件中。
+- 开始修改某仓库前，必须先检查工作树、暂存区与 `commit_message.txt`：仍有未提交变更或已有记录时，保留已有条目并追加本次摘要；两者都为空时，从空文件写入本次条目。不得因仓库存在 ahead commit 而恢复或复制已经进入 Git 历史的记录。
 - `commit_message.txt` 只允许使用 Markdown 无序列表：每个独立变更占一行，格式固定为 `- <中文变更摘要>`；不写标题、空行或列表外正文，不重复已有条目。
-- `darren_space_git.sh push` 必须在每个仓库远端 push 成功后立即清空对应 `commit_message.txt`，push 失败则保留原记录；空文件是成功 push 后的正常稳定状态，不得为清空动作额外制造待推送提交或脏工作树。
+- 任何自动化只要产生目标仓的源码、文档、配置或 gitlink 变更，就必须在同一次操作中为该 Git 根追加合法且不重复的记录；自动化应在同一 Git 根记录锁内按“实际文件写入 → 记录追加”完成，无法跨文件写入持锁时也必须先落真实变更、最后再追加记录，禁止先记录、释放锁后再写文件。记录更新与 `darren_space_git.sh` 的本地 prepare 必须使用同一把锁。
+- `darren_space_git.sh push` 在本地 prepare 中对合法记录取快照，将第一条写入 commit 标题、完整列表写入 commit body，并让 planned commit 跟踪空文件；只消费该快照，快照之后出现的文件或记录保留到下一轮。网络 push 失败时不得恢复或复制已进入 commit body 的记录。
 - 当用户要求提交某个子工程时，优先使用该仓库 `commit_message.txt` 的第一条生成 commit 标题，并将完整无序列表写入 commit body；除非用户明确指定新文案，否则不临时改写。
-- 如果一次任务同时修改多个子工程，必须分别更新各自的 `commit_message.txt`；批量 push 通知在清空前按“项目名: 7 位 commit SHA”分组展示各仓库的完整条目。
+- 如果一次任务同时修改多个子工程，必须分别更新各自的 `commit_message.txt`；批量 push 通知从各 planned SHA 的 Git commit body 读取记录，并按“项目名: 7 位 commit SHA”分组展示。
 
 ## ADB Notify Scope
 
