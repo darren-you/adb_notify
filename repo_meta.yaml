@@ -1,5 +1,6 @@
-schema_version: 3
+schema_version: 4
 name: adb_notify
+workspace_area: tooling
 archetype: tooling_repo
 lifecycle: active
 owner: darren-you
