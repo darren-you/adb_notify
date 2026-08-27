@@ -4,6 +4,31 @@
 
 默认行为：隐藏“已连接到 USB 调试”通知和“正在通过 USB 为此设备充电”通知。
 
+## 架构拓扑
+
+```mermaid
+flowchart TB
+    source["module/ · Magisk 模块源码"]
+    build["scripts/build.sh · 构建入口"]
+    zip["dist/ 与 GitHub Release · 安装 ZIP"]
+    magisk["Android Magisk"]
+    early["post-fs-data.sh · 开机早期属性设置"]
+    late["service.sh 与 action.sh · 晚启动和手动切换"]
+    property["persist.adb.notify · ADB 通知开关"]
+    notifications["Android Notification Service · USB 系统通知"]
+    cli["system/bin/usb-adb-notify · 状态与切换 CLI"]
+
+    source -->|"打包"| build
+    build -->|"生成可安装产物"| zip
+    zip -->|"安装模块"| magisk
+    magisk -->|"开机执行"| early
+    magisk -->|"晚启动或点击 Action 执行"| late
+    early -->|"写入系统属性"| property
+    late -->|"隐藏或恢复当前通知"| notifications
+    cli -->|"触发 on、off 或 toggle"| late
+    property -->|"控制 USB 调试通知"| notifications
+```
+
 ## 原理
 
 ADB 调试通知由 AOSP `UsbDeviceManager.updateAdbNotification()` 读取 `persist.adb.notify` 控制：
