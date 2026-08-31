@@ -46,8 +46,8 @@
 - 开始修改某仓库前，必须先检查工作树、暂存区与 `commit_message.txt`：仍有未提交变更或已有记录时，保留已有条目并追加本次摘要；两者都为空时，从空文件写入本次条目。不得因仓库存在 ahead commit 而恢复或复制已经进入 Git 历史的记录。
 - `commit_message.txt` 只允许使用 Markdown 无序列表：每个独立变更占一行，格式固定为 `- <中文变更摘要>`；不写标题、空行或列表外正文，不重复已有条目。
 - 任何自动化只要产生目标仓的源码、文档、配置或 gitlink 变更，就必须在同一次操作中为该 Git 根追加合法且不重复的记录；自动化应在同一 Git 根记录锁内按“实际文件写入 → 记录追加”完成，无法跨文件写入持锁时也必须先落真实变更、最后再追加记录，禁止先记录、释放锁后再写文件。记录更新与 `darren_space_git.sh` 的本地 prepare 必须使用同一把锁。
-- `darren_space_git.sh push` 在本地 prepare 中对合法记录取快照，将第一条写入 commit 标题、完整列表写入 commit body，并让 planned commit 跟踪空文件；只消费该快照，快照之后出现的文件或记录保留到下一轮。网络 push 失败时不得恢复或复制已进入 commit body 的记录。
-- 当用户要求提交某个子工程时，优先使用该仓库 `commit_message.txt` 的第一条生成 commit 标题，并将完整无序列表写入 commit body；除非用户明确指定新文案，否则不临时改写。
+- `darren_space_git.sh push` 在本地 prepare 中对合法非空记录取快照，将第一条写入 commit 标题、完整列表写入 commit body；缺失、为空或临时不合法时使用中性记录 `- 保存当前工作区快照（任务可继续进行）`，不得把摘要未完成当作拒绝保存代码的依据。planned commit 跟踪空记录文件，缺失文件在本地创建为空；不合法原文保留在工作树，合法记录只消费本轮快照，后来新增或改写的内容保留到下一轮。记录文件为符号链接、目录等不安全写入对象时仍拒绝。非 Git 根同名文件违反编写规范，但不阻断 push。网络 push 失败时不得恢复或复制已进入 commit body 的记录。
+- 当用户要求提交某个子工程时，优先使用该仓库合法非空 `commit_message.txt` 的第一条生成 commit 标题，并将完整无序列表写入 commit body；否则按上述快照摘要保存，除非用户明确指定新文案，不推断或改写任务完成结论。
 - 如果一次任务同时修改多个子工程，必须分别更新各自的 `commit_message.txt`；批量 push 通知从各 planned SHA 的 Git commit body 读取记录，并按“项目名: 7 位 commit SHA”分组展示。
 
 ## Client API Response Contract
@@ -55,7 +55,7 @@
 - 普通 REST JSON 的客户端 DTO 与真实网络解码入口必须共同遵守 `code / timestamp / msg / data` 四字段合同；不能把 TypeScript 类型断言、Swift 合成解码或模板文件一致当作运行时验证。`timestamp` 与 `msg` 必需，`data:null` 不能与缺少 `data` 混同；拒绝额外顶层字段、旧 `message`、旧成功码 `0` 和裸业务 JSON 兼容路径。
 - Auth 错误按 OpenAPI 的 `data.error_code / trace_id` 解析，禁止退回旧 `data.error.code/message`。HTTP 失败和业务失败均不能被客户端当作成功返回；health 按同一 envelope 读取 `data.service`。
 - 新增或修改 DTO、JSON 网络读取、错误映射时，必须同时运行 `python3 harness/scripts/check_client_response_contract.py --repo <逻辑仓库名>` 与该工程真实请求/解码回归；回归至少覆盖成功、失败、null、缺字段、额外字段和旧格式。Web 的 DTO 回归必须进入实际 `npm run build` 链路，不能只留下不会执行的测试文件；Swift 测试必须进入实际使用的 SwiftPM / Xcode target。
-- 工作区 Git push 与 dry-run 在 prepare 前直接执行选定事务范围的客户端合同检查，失败不得提交或推送；普通 scoped 事务只检查目标仓及真实依赖。发现新解析形态时扩展检查器及失败回归，不能添加跳过开关、产品白名单或仅靠 AGENTS 口头保证。完整边界见 `harness/docs/workspace/standards/client_response_contract.md`。
+- 客户端合同检查由工程标准、总治理和对应构建发布链路执行；Git push 与 dry-run 只负责保存和传输代码快照，不执行该质量检查，允许 task 在未完成时保存。发现新解析形态时扩展检查器及失败回归，不能添加产品白名单或仅靠 AGENTS 口头保证；push 成功不能替代构建、测试和发布验证。完整边界见 `harness/docs/workspace/standards/client_response_contract.md`。
 
 ## ADB Notify Scope
 
