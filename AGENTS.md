@@ -50,6 +50,13 @@
 - 当用户要求提交某个子工程时，优先使用该仓库 `commit_message.txt` 的第一条生成 commit 标题，并将完整无序列表写入 commit body；除非用户明确指定新文案，否则不临时改写。
 - 如果一次任务同时修改多个子工程，必须分别更新各自的 `commit_message.txt`；批量 push 通知从各 planned SHA 的 Git commit body 读取记录，并按“项目名: 7 位 commit SHA”分组展示。
 
+## Client API Response Contract
+
+- 普通 REST JSON 的客户端 DTO 与真实网络解码入口必须共同遵守 `code / timestamp / msg / data` 四字段合同；不能把 TypeScript 类型断言、Swift 合成解码或模板文件一致当作运行时验证。`timestamp` 与 `msg` 必需，`data:null` 不能与缺少 `data` 混同；拒绝额外顶层字段、旧 `message`、旧成功码 `0` 和裸业务 JSON 兼容路径。
+- Auth 错误按 OpenAPI 的 `data.error_code / trace_id` 解析，禁止退回旧 `data.error.code/message`。HTTP 失败和业务失败均不能被客户端当作成功返回；health 按同一 envelope 读取 `data.service`。
+- 新增或修改 DTO、JSON 网络读取、错误映射时，必须同时运行 `python3 harness/scripts/check_client_response_contract.py --repo <逻辑仓库名>` 与该工程真实请求/解码回归；回归至少覆盖成功、失败、null、缺字段、额外字段和旧格式。Web 的 DTO 回归必须进入实际 `npm run build` 链路，不能只留下不会执行的测试文件；Swift 测试必须进入实际使用的 SwiftPM / Xcode target。
+- 工作区 Git push 与 dry-run 在 prepare 前直接执行选定事务范围的客户端合同检查，失败不得提交或推送；普通 scoped 事务只检查目标仓及真实依赖。发现新解析形态时扩展检查器及失败回归，不能添加跳过开关、产品白名单或仅靠 AGENTS 口头保证。完整边界见 `harness/docs/workspace/standards/client_response_contract.md`。
+
 ## ADB Notify Scope
 
 - 本仓库维护 USB 系统通知开关 Magisk 模块。
