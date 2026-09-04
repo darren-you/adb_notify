@@ -27,6 +27,7 @@
 - 当前任务明确属于某个技术域时，除根 `README.md` 与子工程 `README.md` 外，还必须优先读取 `harness/docs/workspace/standards/README.md` 与对应 standards 正文。
 - 如果当前任务明确属于某个技术域，但仓库内没有标准目录名，也应优先参考最接近的工作区 standards 文档，而不是只沿用历史实现。
 - 标准冲突时，优先以工作区 `harness/docs/workspace/standards/` 正文和当前仓库真实结构为准。
+- 所有纳管产品的关系型数据库、MongoDB / GridFS、Redis、SQLite、本地持久化、Schema、迁移、查询与事务、备份恢复，以及数据库字段到领域模型、DTO、OpenAPI 和客户端的映射，统一遵循 `harness/docs/workspace/standards/database/database_golden_path.md`。发现漂移时必须先修改真实 Schema / 迁移 / 源码及全部真实消费者，再同步文档和生成视图；禁止只改 AGENTS、README 或规范文本后宣称产品已经合规。
 
 ## Documentation Layout
 
