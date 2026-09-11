@@ -7,6 +7,9 @@ owner: darren-you
 governance_tier: standard
 domains:
   - magisk_module
+domain_roots:
+  magisk_module:
+    - .
 delivery_surfaces:
   - magisk_module
 depends_on: []
@@ -16,7 +19,6 @@ doc_status:
   architecture: present
   api: not_applicable
   release: present
-  agent_context: present
 github:
   repo: darren-you/adb_notify
   about: Magisk 模块，用于切换 Android USB 调试与 USB 充电/连接通知
@@ -32,4 +34,3 @@ entrypoints:
   - AGENTS.md
   - module
   - scripts/build.sh
-  - harness/docs/workspace/repositories/adb_notify/agent_context.md
