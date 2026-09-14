@@ -13,7 +13,7 @@
 - 在 darren_space 中提交、推送和依赖同步使用工作区 Git 入口及共享记录锁；独立 checkout 的开发和测试不以该入口可用为前提。默认分支保持 master，逻辑仓名、GitHub 仓名及部署身份不随目录改名改变。
 - 统一发布仍通过 darren_space 的 Fast Deploy。需要发布时读取实际 deploy_config.sh 与已登记 Job；本地测试和 Git 保存分别报告，不能等同于线上发布通过。
 - 敏感配置只消费明确授权的既有事实源，不回显值，不因时间、私有会话读取或一般建议自行更换凭据。
-- 涉及数据库、持久化、迁移或字段映射时，先修改真实 Schema、迁移、源码及全部实际消费者，再同步文档；备份恢复需验证恢复后的数据可用。聚合检查和发布遵循 `harness/docs/workspace/standards/database/database_golden_path.md`，项目本地验证按本仓说明执行。
+- 涉及数据库、持久化、迁移或字段映射时，先修改真实 Schema、迁移、源码及全部实际消费者，再同步文档。聚合检查和发布遵循 `harness/docs/workspace/standards/database/database_golden_path.md`，项目本地验证按本仓说明执行。
 
 ## Client API Response Contract
 
